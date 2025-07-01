@@ -1,19 +1,20 @@
-**Application**
+# Application
 
 [Gonic website](https://github.com/sentriz/gonic)
 
-**Description**
+## Description
 
 Free-software subsonic server API implementation, supporting its many clients.
 
-
-**Build notes**
+## Build notes
 
 Latest stable Gonic release from Arch User Repository (AUR).
 
-**Usage**
-```
+## Usage
+
+```bash
 docker run -d \
+
     -p 4747:4747 \
     --name=<container name> \
     -v <path for media files>:/media \
@@ -25,20 +26,25 @@ docker run -d \
     -e UMASK=<umask for created files> \
     -e PUID=<UID for user> \
     -e PGID=<GID for user> \
+
     binhex/arch-gonic
+
 ```
 
-Please replace all user variables in the above command defined by <> with the correct values.
+Please replace all user variables in the above command defined by <> with the
+correct values.
 
-**Access application**
+## Access application
 
 `http://<host ip>:4747`
 
 Default username/password: `admin/admin`
 
-**Example**
-```
+## Example
+
+```bash
 docker run -d \
+
     -p 4747:4747 \
     --name=gonic \
     -v /media/music:/media \
@@ -50,16 +56,21 @@ docker run -d \
     -e UMASK=000 \
     -e PUID=0 \
     -e PGID=0 \
+
     binhex/arch-gonic
-```
-
-**Notes**
-
-User ID (PUID) and Group ID (PGID) can be found by issuing the following command for the user you want to run the container as:-
 
 ```
+
+## Notes
+
+User ID (PUID) and Group ID (PGID) can be found by issuing the following command
+for the user you want to run the container as:-
+
+```bash
 id <username>
+
 ```
+
 ___
 If you appreciate my work, then please consider buying me a beer  :D
 
