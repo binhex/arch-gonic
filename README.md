@@ -14,7 +14,6 @@ Latest stable Gonic release from Arch User Repository (AUR).
 
 ```bash
 docker run -d \
-
     -p 4747:4747 \
     --name=<container name> \
     -v <path for media files>:/media \
@@ -26,9 +25,7 @@ docker run -d \
     -e UMASK=<umask for created files> \
     -e PUID=<UID for user> \
     -e PGID=<GID for user> \
-
     binhex/arch-gonic
-
 ```
 
 Please replace all user variables in the above command defined by <> with the
@@ -44,7 +41,6 @@ Default username/password: `admin/admin`
 
 ```bash
 docker run -d \
-
     -p 4747:4747 \
     --name=gonic \
     -v /media/music:/media \
@@ -56,9 +52,7 @@ docker run -d \
     -e UMASK=000 \
     -e PUID=0 \
     -e PGID=0 \
-
     binhex/arch-gonic
-
 ```
 
 ## Notes
@@ -68,7 +62,6 @@ for the user you want to run the container as:-
 
 ```bash
 id <username>
-
 ```
 
 ___
