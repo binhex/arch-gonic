@@ -22,6 +22,8 @@ docker run -d \
     -e GONIC_MUSIC_PATH=<path to music files> \
     -e GONIC_PODCAST_PATH=<path to podcast files> \
     -e GONIC_PLAYLISTS_PATH=<path to playlist files> \
+    -e HEALTHCHECK_COMMAND=<command> \
+    -e HEALTHCHECK_ACTION=<action> \
     -e UMASK=<umask for created files> \
     -e PUID=<UID for user> \
     -e PGID=<GID for user> \
