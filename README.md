@@ -24,6 +24,7 @@ docker run -d \
     -e GONIC_PLAYLISTS_PATH=<path to playlist files> \
     -e HEALTHCHECK_COMMAND=<command> \
     -e HEALTHCHECK_ACTION=<action> \
+    -e HEALTHCHECK_HOSTNAME=<hostname> \
     -e UMASK=<umask for created files> \
     -e PUID=<UID for user> \
     -e PGID=<GID for user> \
