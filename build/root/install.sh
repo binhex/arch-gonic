@@ -102,31 +102,84 @@ rm /tmp/permissions_heredoc
 
 cat <<'EOF' > /tmp/envvars_heredoc
 
-export GONIC_MUSIC_PATH=$(echo "${GONIC_MUSIC_PATH}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-if [[ ! -z "${GONIC_MUSIC_PATH}" ]]; then
-	echo "[info] GONIC_MUSIC_PATH defined as '${GONIC_MUSIC_PATH}'" | ts '%Y-%m-%d %H:%M:%.S'
-else
-	echo "[info] GONIC_MUSIC_PATH not defined,(via -e GONIC_MUSIC_PATH), defaulting to '/config/music'" | ts '%Y-%m-%d %H:%M:%.S'
-	export GONIC_MUSIC_PATH="/config/music"
-fi
+# source in utility functions, need process_env_var
+source utils.sh
 
-export GONIC_PODCAST_PATH=$(echo "${GONIC_PODCAST_PATH}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-if [[ ! -z "${GONIC_PODCAST_PATH}" ]]; then
-	echo "[info] GONIC_PODCAST_PATH defined as '${GONIC_PODCAST_PATH}'" | ts '%Y-%m-%d %H:%M:%.S'
-else
-	echo "[info] GONIC_PODCAST_PATH not defined,(via -e GONIC_PODCAST_PATH), defaulting to '/config/podcasts'" | ts '%Y-%m-%d %H:%M:%.S'
-	export GONIC_PODCAST_PATH="/config/podcasts"
-fi
+# define environment variables to process
+# format: "VAR_NAME:DEFAULT_VALUE:REQUIRED:MASK"
+# note: - a default value must not contain a colon, it is the field separator
+#       - an empty default means the app default is used, gonic ignores empty env vars
+#       - required variables must be supplied, the container exits if not, so the default is not used
+#       - the paths under /config/gonic are created by run/nobody/start.sh
+env_vars=(
+	# paths
+	"GONIC_MUSIC_PATH:/config/music:true:false"
+	"GONIC_PODCAST_PATH:/config/podcasts:true:false"
+	"GONIC_PLAYLISTS_PATH:/config/playlists:true:false"
+	"GONIC_CACHE_PATH:/config/gonic/cache:true:false"
+	"GONIC_DB_PATH:/config/gonic/db/gonic.db:true:false"
 
-export GONIC_PLAYLISTS_PATH=$(echo "${GONIC_PLAYLISTS_PATH}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-if [[ ! -z "${GONIC_PLAYLISTS_PATH}" ]]; then
-	echo "[info] GONIC_PLAYLISTS_PATH defined as '${GONIC_PLAYLISTS_PATH}'" | ts '%Y-%m-%d %H:%M:%.S'
-else
-	echo "[info] GONIC_PLAYLISTS_PATH not defined,(via -e GONIC_PLAYLISTS_PATH), defaulting to '/config/playlists'" | ts '%Y-%m-%d %H:%M:%.S'
-	export GONIC_PLAYLISTS_PATH="/config/playlists"
-fi
+	# web interface
+	"GONIC_LISTEN_ADDR::false:false"
+	"GONIC_PROXY_PREFIX::false:false"
+	"GONIC_TLS_CERT::false:false"
+	"GONIC_TLS_KEY::false:false"
+	"GONIC_HTTP_LOG::false:false"
 
+	# scanning
+	"GONIC_SCAN_INTERVAL::false:false"
+	"GONIC_SCAN_AT_START_ENABLED::false:false"
+	"GONIC_SCAN_WATCHER_ENABLED::false:false"
+	"GONIC_SCAN_EMBEDDED_COVER_ENABLED::false:false"
+	"GONIC_EXCLUDE_PATTERN::false:false"
+	"GONIC_GENRE_TREE::false:false"
+
+	# multi valued tags
+	"GONIC_MULTI_VALUE_GENRE::false:false"
+	"GONIC_MULTI_VALUE_ARTIST::false:false"
+	"GONIC_MULTI_VALUE_ALBUM_ARTIST::false:false"
+	"GONIC_MULTI_VALUE_ISRC::false:false"
+
+	# cache maintenance
+	"GONIC_TRANSCODE_CACHE_SIZE::false:false"
+	"GONIC_TRANSCODE_EJECT_INTERVAL::false:false"
+	"GONIC_COVER_CACHE_SIZE::false:false"
+	"GONIC_COVER_EJECT_INTERVAL::false:false"
+	"GONIC_PODCAST_PURGE_AGE::false:false"
+
+	# jukebox
+	"GONIC_JUKEBOX_ENABLED::false:false"
+	"GONIC_JUKEBOX_MPV_EXTRA_ARGS::false:false"
+
+	# debugging
+	"GONIC_EXPVAR::false:false"
+	"GONIC_PPROF::false:false"
+	"GONIC_LOG_DB::false:false"
+)
+
+# process each environment variable
+if declare -F process_env_var > /dev/null; then
+
+	for env_var in "${env_vars[@]}"; do
+		IFS=':' read -r var_name default_value required mask_value <<< "${env_var}"
+		process_env_var "${var_name}" "${default_value}" "${required}" "${mask_value}"
+	done
+
+else
+
+	# the scripts repository is not up to date, do not exit as the env vars are
+	# still passed through to the app by docker
+	echo "[warn] process_env_var function not available, skipping gonic env var processing" | ts '%Y-%m-%d %H:%M:%.S'
+
+fi
 EOF
+
+# replace env vars placeholder string with contents of file (here doc)
+sed -i '/# ENVVARS_PLACEHOLDER/{
+    s/# ENVVARS_PLACEHOLDER//g
+    r /tmp/envvars_heredoc
+}' /usr/bin/init.sh
+rm /tmp/envvars_heredoc
 
 # cleanup
 cleanup.sh

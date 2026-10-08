@@ -22,6 +22,8 @@ docker run -d \
     -e GONIC_MUSIC_PATH=<path to music files> \
     -e GONIC_PODCAST_PATH=<path to podcast files> \
     -e GONIC_PLAYLISTS_PATH=<path to playlist files> \
+    -e GONIC_CACHE_PATH=<path to cache files> \
+    -e GONIC_DB_PATH=<path to database file> \
     -e HEALTHCHECK_COMMAND=<command> \
     -e HEALTHCHECK_ACTION=<action> \
     -e HEALTHCHECK_HOSTNAME=<hostname> \
@@ -52,6 +54,8 @@ docker run -d \
     -e GONIC_MUSIC_PATH='/media' \
     -e GONIC_PODCAST_PATH='/config/gonic/podcasts' \
     -e GONIC_PLAYLISTS_PATH='/config/gonic/playlists' \
+    -e GONIC_CACHE_PATH='/config/gonic/cache' \
+    -e GONIC_DB_PATH='/config/gonic/db/gonic.db' \
     -e UMASK=000 \
     -e PUID=0 \
     -e PGID=0 \
