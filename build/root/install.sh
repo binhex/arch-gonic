@@ -113,9 +113,9 @@ source utils.sh
 #       - the paths under /config/gonic are created by run/nobody/start.sh
 env_vars=(
 	# paths
-	"GONIC_MUSIC_PATH:/config/music:true:false"
-	"GONIC_PODCAST_PATH:/config/podcasts:true:false"
-	"GONIC_PLAYLISTS_PATH:/config/playlists:true:false"
+	"GONIC_MUSIC_PATH:/config/gonic/music:true:false"
+	"GONIC_PODCAST_PATH:/config/gonic/podcasts:true:false"
+	"GONIC_PLAYLISTS_PATH:/config/gonic/playlists:true:false"
 	"GONIC_CACHE_PATH:/config/gonic/cache:true:false"
 	"GONIC_DB_PATH:/config/gonic/db/gonic.db:true:false"
 

@@ -1,9 +1,7 @@
 #!/usr/bin/dumb-init /bin/bash
 
-root_folder='/config/gonic'
-
-# create all paths
-mkdir -p "${root_folder}/music" "${root_folder}/podcasts" "${root_folder}/playlists" "${root_folder}/cache" "${root_folder}/db"
+# create required paths
+mkdir -p "${GONIC_MUSIC_PATH}" "${GONIC_PODCAST_PATH}" "${GONIC_PLAYLISTS_PATH}" "${GONIC_CACHE_PATH}" "${GONIC_DB_PATH}"
 
 # run app
 /usr/bin/gonic
