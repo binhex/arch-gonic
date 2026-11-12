@@ -155,6 +155,8 @@ env_vars=(
 	"GONIC_EXPVAR::false:false"
 	"GONIC_PPROF::false:false"
 	"GONIC_LOG_DB::false:false"
+	"ENABLE_STARTUP_SCRIPTS:no:false:false"
+	"STARTUP_SCRIPTS_MODE:wait:false:false"
 )
 
 # process each environment variable

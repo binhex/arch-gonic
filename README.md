@@ -49,6 +49,8 @@ docker run -d \
     -e GONIC_EXPVAR=true|false \
     -e GONIC_PPROF=true|false \
     -e GONIC_LOG_DB=true|false \
+    -e ENABLE_STARTUP_SCRIPTS=<yes|no> \
+    -e STARTUP_SCRIPTS_MODE=<wait|parallel> \
     -e HEALTHCHECK_COMMAND=<command> \
     -e HEALTHCHECK_ACTION=<action> \
     -e HEALTHCHECK_HOSTNAME=<hostname> \
@@ -83,6 +85,8 @@ docker run -d \
     -e GONIC_DB_PATH='/config/gonic/db/gonic.db' \
     -e GONIC_SCAN_INTERVAL=60 \
     -e GONIC_SCAN_WATCHER_ENABLED=true \
+    -e ENABLE_STARTUP_SCRIPTS=no \
+    -e STARTUP_SCRIPTS_MODE=wait \
     -e UMASK=000 \
     -e PUID=0 \
     -e PGID=0 \
@@ -90,6 +94,14 @@ docker run -d \
 ```
 
 ## Notes
+
+`ENABLE_STARTUP_SCRIPTS` when set to `yes` (default `no`) will allow a user to
+install additional packages from the official Arch Repository or the Arch User
+Repository (AUR) via scripts located in the folder `/config/gonic/scripts/`.
+
+`STARTUP_SCRIPTS_MODE` controls how those scripts are executed, set to `wait`
+(default) to run each script in turn and wait for it to complete before the next
+script runs, or `parallel` to run all scripts at the same time.
 
 User ID (PUID) and Group ID (PGID) can be found by issuing the following command
 for the user you want to run the container as:-
